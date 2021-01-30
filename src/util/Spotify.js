@@ -1,13 +1,14 @@
 const clientID = process.env.REACT_APP_CLIENT_ID;
 const clientSecret = process.env.REACT_APP_CLIENT_SECRET;
 const redirectURI = process.env.REACT_APP_REDIRECT_URI;
-console.log(clientID);
 
 let accessToken;
 let expiresIn;
 
 const Spotify = {
     getAccessToken() {
+        console.log(clientID);
+
         const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
         const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
 
@@ -36,6 +37,7 @@ const Spotify = {
         }
 
         const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&redirect_uri=${redirectURI}&scope=playlist-modify-public`;
+        console.log(accessUrl);
         window.location = accessUrl;
     },
 
