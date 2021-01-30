@@ -2,6 +2,7 @@
 
 .env
 /src/util/GoogleBooks.js
+notes.js
 
 # dependencies
 /node_modules

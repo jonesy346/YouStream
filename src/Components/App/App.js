@@ -115,11 +115,9 @@ function App() {
   }
 
   const randomizePlaylist = (songlist) => {
-    console.log(songlist);
     const songIDList = songlist.map((song) => song.id);
     Spotify.getRecommendedSongs(songIDList).then((newSongs) => {
       setPlaylistSongs(newSongs);
-      console.log(newSongs);
     });
   }
 
