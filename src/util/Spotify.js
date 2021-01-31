@@ -1,6 +1,7 @@
 const clientID = process.env.REACT_APP_CLIENT_ID;
 const clientSecret = process.env.REACT_APP_CLIENT_SECRET;
-const redirectURI = process.env.REACT_APP_REDIRECT_URI;
+// const redirectURI = process.env.REACT_APP_REDIRECT_URI;
+const redirectURI = "https://youstreamreact.herokuapp.com/callback";
 
 let accessToken;
 let expiresIn;
