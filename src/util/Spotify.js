@@ -5,6 +5,11 @@ const redirectURI = process.env.REACT_APP_REDIRECT_URI;
 let accessToken;
 let expiresIn;
 
+// log in button
+// debug clicking randomizer button
+// instruction manual
+// adding a song removes it from the lefthand side list
+
 const Spotify = {
     getAccessToken() {
         console.log(clientID);
@@ -67,6 +72,7 @@ const Spotify = {
 
     getArtistSongs(id) {
         accessToken = Spotify.getAccessToken();
+        console.log(accessToken);
         return fetch(`https://api.spotify.com/v1/artists/${id}/top-tracks?country=US`, 
             {
                 headers: {Authorization: `Bearer ${accessToken}`}
@@ -85,6 +91,7 @@ const Spotify = {
                 imageUrl: track.album.images[2].url
             }));
         });
+
     },
 
     getRecommendedSongs(songIDList) {
@@ -98,6 +105,7 @@ const Spotify = {
         // ensure playlist information doesn't get cleared if a user has to refresh their access token
 
         console.log(accessToken);
+        console.log(queryStringParams);
         return fetch(`https://api.spotify.com/v1/recommendations${queryStringParams}`, 
             {
                 headers: {Authorization: `Bearer ${accessToken}`}
