@@ -4,6 +4,7 @@ import SearchBar from '../SearchBar/SearchBar.js';
 import SearchResults from '../SearchResults/SearchResults.js';
 import Playlist from '../Playlist/Playlist.js';
 import Spotify from '../../util/Spotify.js';
+import $ from 'jquery'; 
 
 function App() {
   const [searchResults, setSearchResults] = useState(
@@ -55,88 +56,88 @@ function App() {
 
   useEffect(() => {
     // Update the document title using the browser API
-      // $(".modal").each(function() {
+      $(".modal").each(function() {
     
-      // var element = this;
-      // var pages = $(this).find('.modal-split');
+      var element = this;
+      var pages = $(this).find('.modal-split');
     
-      // if (pages.length != 0)
-      // {
-      //     pages.hide();
-      //     pages.eq(0).show();
+      if (pages.length !== 0)
+      {
+          pages.hide();
+          pages.eq(0).show();
     
-      //     var b_button = document.createElement("button");
-      //               b_button.setAttribute("type","button");
-      //               b_button.setAttribute("class","btn btn-primary");
-      //               b_button.setAttribute("style","display: none;");
-      //               b_button.innerHTML = "Back";
+          let b_button = document.createElement("button");
+                    b_button.setAttribute("type","button");
+                    b_button.setAttribute("class","btn btn-primary");
+                    b_button.setAttribute("style","display: none;");
+                    b_button.innerHTML = "Back";
     
-      //     var n_button = document.createElement("button");
-      //               n_button.setAttribute("type","button");
-      //               n_button.setAttribute("class","btn btn-primary");
-      //               n_button.innerHTML = "Next";
+          let n_button = document.createElement("button");
+                    n_button.setAttribute("type","button");
+                    n_button.setAttribute("class","btn btn-primary");
+                    n_button.innerHTML = "Next";
     
-      //     $(this).find('.modal-footer').append(b_button).append(n_button);
+          $(this).find('.modal-footer').append(b_button).append(n_button);
     
     
-      //     var page_track = 0;
+          var page_track = 0;
     
-      //     $(n_button).click(function() {
+          $(n_button).on(function() {
             
-      //       this.blur();
+            this.blur();
     
-      //       if(page_track == 0)
-      //       {
-      //         $(b_button).show();
-      //       }
+            if(page_track === 0)
+            {
+              $(b_button).show();
+            }
     
-      //       if(page_track === pages.length-2)
-      //       {
-      //         $(n_button).text("Submit");
-      //       }
+            if(page_track === pages.length-2)
+            {
+              $(n_button).text("Submit");
+            }
     
-      //       if(page_track === pages.length-1)
-      //       {
-      //         $(element).find("form").submit();
-      //       }
+            if(page_track === pages.length-1)
+            {
+              $(element).find("form").submit();
+            }
     
-      //       if(page_track < pages.length-1)
-      //       {
-      //         page_track++;
+            if(page_track < pages.length-1)
+            {
+              page_track++;
     
-      //         pages.hide();
-      //         pages.eq(page_track).show();
-      //       }
-    
-    
-      //     });
-    
-      //     $(b_button).click(function() {
-    
-      //       if(page_track === 1)
-      //       {
-      //         $(b_button).hide();
-      //       }
-    
-      //       if(page_track === pages.length-1)
-      //       {
-      //         $(n_button).text("Next");
-      //       }
-    
-      //       if(page_track > 0)
-      //       {
-      //         page_track--;
-    
-      //         pages.hide();
-      //         pages.eq(page_track).show();
-      //       }
+              pages.hide();
+              pages.eq(page_track).show();
+            }
     
     
-      //     });
+          });
     
-      // }
+          $(b_button).on(function() {
     
-      // });
+            if(page_track === 1)
+            {
+              $(b_button).hide();
+            }
+    
+            if(page_track === pages.length-1)
+            {
+              $(n_button).text("Next");
+            }
+    
+            if(page_track > 0)
+            {
+              page_track--;
+    
+              pages.hide();
+              pages.eq(page_track).show();
+            }
+    
+    
+          });
+    
+      }
+    
+      });
     
   });
 
@@ -208,6 +209,9 @@ function App() {
     });
   }
 
+  const clientID = process.env.REACT_APP_CLIENT_ID;
+  const clientSecret = process.env.REACT_APP_CLIENT_SECRET;
+  const redirectURI = process.env.REACT_APP_REDIRECT_URI;
 
   //Display "+" if track is not in the playlist
   //Display "-" if track is in the playlist
@@ -220,6 +224,7 @@ function App() {
     Spotify.getAccessToken().then(
       accessTokenMatch = window.location.href.match(/access_token=([^&]*)/) ? true : false
     );
+
   };
     
   const logInAction = boolean => {
@@ -227,7 +232,10 @@ function App() {
     if (!boolean) {
         console.log('not logged in, please log in');
         return (
-            <button className="Playlist-button" onClick={logIn}>Log In</button>
+          <div className="navBtnContainer" onClick={logIn}>
+            <img alt="Spotify" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+U3BvdGlmeV9JY29uX1JHQl9HcmVlbjwvdGl0bGU+PHBhdGggZD0iTTE1LjU4OCA5LjA5NEMxMi40MyA3LjIyIDcuMjIzIDcuMDQ3IDQuMjA4IDcuOTZjLS40ODMuMTQ4LS45OTQtLjEyNS0xLjE0LS42MS0uMTQ4LS40ODMuMTI1LS45OTUuNjEtMS4xNDIgMy40Ni0xLjA1IDkuMjEtLjg0NyAxMi44NDUgMS4zMS40MzYuMjYuNTguODIuMzIgMS4yNTYtLjI1OC40MzUtLjgyLjU4LTEuMjU1LjMyem0tLjEwMyAyLjc3N2MtLjIyMi4zNi0uNjkyLjQ3My0xLjA1LjI1My0yLjYzMy0xLjYxOC02LjY0Ni0yLjA4Ny05Ljc2LTEuMTQyLS40MDQuMTIzLS44My0uMTA0LS45NTMtLjUwOC0uMTIyLS40MDMuMTA2LS44My41MS0uOTUyIDMuNTU2LTEuMDggNy45OC0uNTU3IDExLjAwMiAxLjMuMzYuMjIyLjQ3Mi42OTMuMjUgMS4wNXptLTEuMiAyLjY2OGMtLjE3NS4yOS0uNTUuMzgtLjgzOC4yMDMtMi4zLTEuNDA0LTUuMTk1LTEuNzIyLTguNjA0LS45NDMtLjMzLjA3NS0uNjU2LS4xMy0uNzMtLjQ2LS4wNzctLjMyOC4xMy0uNjU1LjQ1OC0uNzMgMy43MzItLjg1MyA2LjkzMi0uNDg2IDkuNTE0IDEuMDkyLjI4OC4xNzQuMzc4LjU1LjIwMi44Mzh6TTkuNzk2LjQxQzQuMzg1LjQxIDAgNC43OTcgMCAxMC4yMDYgMCAxNS42MTUgNC4zODUgMjAgOS43OTUgMjBzOS43OTQtNC4zODUgOS43OTQtOS43OTVTMTUuMjAzLjQxIDkuNzk0LjQxeiIgZmlsbD0iIzREQjA1QiIgZmlsbC1ydWxlPSJldmVub2RkIi8+PC9zdmc+" id="spotifyImg"/><span>Connect with Spotify</span>
+          </div>
+            // <button className="Playlist-button" onClick={logIn}>Log In</button>
         )
     }
 
@@ -238,116 +246,44 @@ function App() {
 
   };
 
-  // MODAL BUTTONS AND FUNCTIONALITY
+  const openModal = e => {
+    const app = e.target.parentElement;
+    const modal = app.querySelector('.modal');
+    // const overlay = app.querySelector('#overlay');
 
-// const openModalButtons = document.querySelectorAll('[data-modal-target]');
-// const closeModalButtons = document.querySelectorAll('[data-close-button]');
-// const overlay = document.getElementById('overlay');
+    modal.classList.add('active');
+    // overlay.classList.add('active');
+    
+    // overlay.addEventListener('click', closeModal);
+  }
 
-// openModalButtons.forEach(button => {
-//     button.addEventListener('click', () => {
-//         const modal = document.querySelector(button.dataset.modalTarget);
-//         openModal(modal);
-//     });
-// });
+  const closeModal = e => {
+    const app = e.target.closest('.App');
+    const modal = app.querySelector('.modal');
+    // const overlay = app.querySelector('#overlay');
 
-// overlay.addEventListener('click', () => {
-//     const modals = document.querySelectorAll('.modal.active');
-//     modals.forEach(modal => {
-//         closeModal(modal);
-//     });
-// });
-
-// closeModalButtons.forEach(button => {
-//     button.addEventListener('click', () => {
-//         const modal = button.closest('.modal');
-//         closeModal(modal);
-//     });
-// });
-
-// const openModal = modal => {
-//     if (modal == null) return;
-//     modal.classList.add('active');
-//     overlay.classList.add('active');
-// };
-
-// const closeModal = modal => {
-//     if (modal == null) return;
-//     modal.classList.remove('active');
-//     overlay.classList.remove('active');
-// };
-
-
-
-const openModal = e => {
-  const app = e.target.parentElement;
-  const modal = app.querySelector('.modal');
-  const overlay = app.querySelector('#overlay');
-
-  modal.classList.add('active');
-  overlay.classList.add('active');
-  
-  overlay.addEventListener('click', closeModal);
-}
-
-const closeModal = e => {
-  const app = e.target.closest('.App');
-  const modal = app.querySelector('.modal');
-  const overlay = app.querySelector('#overlay');
-
-  modal.classList.remove('active');
-  overlay.classList.remove('active');
-}
+    modal.classList.remove('active');
+    // overlay.classList.remove('active');
+  }
 
   return (
     <div>
       <h1>YouStream</h1>
       <div className="App">
         <button className="Playlist-button" onClick={openModal}>Tutorial</button>
-        {/* <section>
-          <div class="modal" id="modal">
-            <div class="modal-header">
-              <div class="title">Top Rated Comments</div>
-              <button data-close-button class="close-button" onClick={closeModal}>&times;</button>
-            </div>
-            <div class="modal-body">
-              <div id="mostLikedMessages">
-                <span class="modal-body-header">
-                  <h1>Most Liked Comments</h1>
-                  <img src="./images/heart.png" alt=""/>
-                </span>
-              </div>
-              <div id="smartestMessages">
-                <span class="modal-body-header">
-                  <h1>Smartest Comments</h1>
-                  <img src="./images/einstein.png" alt=""/>
-                </span>
-              </div>
-              <div id="funniestMessages">
-                <span class="modal-body-header">
-                  <h1>Funniest Comments</h1>
-                  <img src="./images/laugh.png" alt=""/>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div id="overlay"></div>
-        </section> */}
 
-        <div className="alert alert-info">
+        {/* <div className="alert alert-info">
           Boostrap Multi-Page Modal - Each 
           <br/><code>&lt;div className=&quot;modal-split&quot;&gt;&lt;/div&gt;</code> 
           <br/>Declaration is a page. 
         </div>
 
-        {/* <!-- Button trigger modal --> */}
         <div className="button">
           <button type="button" className="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
           Launch demo modal
           </button>
         </div>
 
-        {/* <!-- Modal --> */}
         <div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel">
           <div className="modal-dialog" role="document">
 
@@ -373,7 +309,6 @@ const closeModal = e => {
               </div>
 
               <div className="modal-footer">
-                {/* <!--Nothing Goes Here but is needed! --> */}
               </div>
             </div>
           </div>
@@ -384,11 +319,15 @@ const closeModal = e => {
           <br/><code>&lt;div className=&quot;modal-split&quot;&gt; Page 1 content goes here &lt;/div&gt;
           <br/>&lt;div className=&quot;modal-split&quot;&gt; Page 2 content goes here &lt;/div&gt;
           <br/>&lt;div className=&quot;modal-split&quot;&gt; and so on  &lt;/div&gt;</code>
-        </div> 
+        </div>  */}
 
-        <div>
-          {logInAction(accessTokenMatch)}
-        </div>
+        
+        {logInAction(accessTokenMatch)}
+        
+        {/* <div class="navBtnContainer">
+          <a class="navBtnText" href={`https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&redirect_uri=${redirectURI}&scope=playlist-modify-public`}><img alt="Spotify" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+U3BvdGlmeV9JY29uX1JHQl9HcmVlbjwvdGl0bGU+PHBhdGggZD0iTTE1LjU4OCA5LjA5NEMxMi40MyA3LjIyIDcuMjIzIDcuMDQ3IDQuMjA4IDcuOTZjLS40ODMuMTQ4LS45OTQtLjEyNS0xLjE0LS42MS0uMTQ4LS40ODMuMTI1LS45OTUuNjEtMS4xNDIgMy40Ni0xLjA1IDkuMjEtLjg0NyAxMi44NDUgMS4zMS40MzYuMjYuNTguODIuMzIgMS4yNTYtLjI1OC40MzUtLjgyLjU4LTEuMjU1LjMyem0tLjEwMyAyLjc3N2MtLjIyMi4zNi0uNjkyLjQ3My0xLjA1LjI1My0yLjYzMy0xLjYxOC02LjY0Ni0yLjA4Ny05Ljc2LTEuMTQyLS40MDQuMTIzLS44My0uMTA0LS45NTMtLjUwOC0uMTIyLS40MDMuMTA2LS44My41MS0uOTUyIDMuNTU2LTEuMDggNy45OC0uNTU3IDExLjAwMiAxLjMuMzYuMjIyLjQ3Mi42OTMuMjUgMS4wNXptLTEuMiAyLjY2OGMtLjE3NS4yOS0uNTUuMzgtLjgzOC4yMDMtMi4zLTEuNDA0LTUuMTk1LTEuNzIyLTguNjA0LS45NDMtLjMzLjA3NS0uNjU2LS4xMy0uNzMtLjQ2LS4wNzctLjMyOC4xMy0uNjU1LjQ1OC0uNzMgMy43MzItLjg1MyA2LjkzMi0uNDg2IDkuNTE0IDEuMDkyLjI4OC4xNzQuMzc4LjU1LjIwMi44Mzh6TTkuNzk2LjQxQzQuMzg1LjQxIDAgNC43OTcgMCAxMC4yMDYgMCAxNS42MTUgNC4zODUgMjAgOS43OTUgMjBzOS43OTQtNC4zODUgOS43OTQtOS43OTVTMTUuMjAzLjQxIDkuNzk0LjQxeiIgZmlsbD0iIzREQjA1QiIgZmlsbC1ydWxlPSJldmVub2RkIi8+PC9zdmc+" id="spotifyImg"/><span class="_1BOC1e8tx5AhHF_ehsVixH">Connect with Spotify</span>
+          </a>
+        </div> */}
         <SearchBar onSearch={search} onLuckySearch={luckySearch} playlistSongs={playlistSongs}/>
         <div className="App-playlist">
           <SearchResults searchResults={searchResults} onAdd={addSong}/>
