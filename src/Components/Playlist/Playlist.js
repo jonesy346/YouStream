@@ -17,6 +17,7 @@ export default function Playlist(props) {
 
     return (
         <div className="Playlist">
+            <h3>Playlist Name:</h3>
             <input defaultValue={"New Playlist"} onChange={handleNameChange}/>
             <SongList 
                 songs={props.playlistSongs}

@@ -4,7 +4,7 @@ import SearchBar from '../SearchBar/SearchBar.js';
 import SearchResults from '../SearchResults/SearchResults.js';
 import Playlist from '../Playlist/Playlist.js';
 import Spotify from '../../util/Spotify.js';
-import $ from 'jquery'; 
+// import $ from 'jquery'; 
 
 function App() {
   const [searchResults, setSearchResults] = useState(
@@ -54,90 +54,37 @@ function App() {
     ]
   );
 
+  let steps;
+
   useEffect(() => {
     // Update the document title using the browser API
-      $(".modal").each(function() {
+    steps = Array.from(document.querySelectorAll(".modal .step"));
+    const nextBtn = document.querySelectorAll(".modal .next-btn");
+    const prevBtn = document.querySelectorAll(".modal .previous-btn");
+    const modal = document.querySelector(".modal");
     
-      var element = this;
-      var pages = $(this).find('.modal-split');
-    
-      if (pages.length !== 0)
-      {
-          pages.hide();
-          pages.eq(0).show();
-    
-          let b_button = document.createElement("button");
-                    b_button.setAttribute("type","button");
-                    b_button.setAttribute("class","btn btn-primary");
-                    b_button.setAttribute("style","display: none;");
-                    b_button.innerHTML = "Back";
-    
-          let n_button = document.createElement("button");
-                    n_button.setAttribute("type","button");
-                    n_button.setAttribute("class","btn btn-primary");
-                    n_button.innerHTML = "Next";
-    
-          $(this).find('.modal-footer').append(b_button).append(n_button);
-    
-    
-          var page_track = 0;
-    
-          $(n_button).on(function() {
-            
-            this.blur();
-    
-            if(page_track === 0)
-            {
-              $(b_button).show();
-            }
-    
-            if(page_track === pages.length-2)
-            {
-              $(n_button).text("Submit");
-            }
-    
-            if(page_track === pages.length-1)
-            {
-              $(element).find("form").submit();
-            }
-    
-            if(page_track < pages.length-1)
-            {
-              page_track++;
-    
-              pages.hide();
-              pages.eq(page_track).show();
-            }
-    
-    
-          });
-    
-          $(b_button).on(function() {
-    
-            if(page_track === 1)
-            {
-              $(b_button).hide();
-            }
-    
-            if(page_track === pages.length-1)
-            {
-              $(n_button).text("Next");
-            }
-    
-            if(page_track > 0)
-            {
-              page_track--;
-    
-              pages.hide();
-              pages.eq(page_track).show();
-            }
-    
-    
-          });
-    
-      }
-    
+    nextBtn.forEach((button) => {
+      button.addEventListener("click", () => {
+        changeStep("next");
       });
+    });
+    prevBtn.forEach((button) => {
+      button.addEventListener("click", () => {
+        changeStep("prev");
+      });
+    });
+    
+    modal.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const inputs = [];
+      modal.querySelectorAll("input").forEach((input) => {
+        const { name, value } = input;
+        inputs.push({ name, value });
+      });
+      modal.reset();
+    });
+    
+
     
   });
 
@@ -215,7 +162,6 @@ function App() {
 
   //Display "+" if track is not in the playlist
   //Display "-" if track is in the playlist
-
   
   let accessTokenMatch = window.location.href.match(/access_token=([^&]*)/) ? true : false;
   console.log(accessTokenMatch);
@@ -249,78 +195,127 @@ function App() {
   const openModal = e => {
     const app = e.target.parentElement;
     const modal = app.querySelector('.modal');
-    // const overlay = app.querySelector('#overlay');
+    const overlay = app.querySelector('#overlay');
 
     modal.classList.add('active');
-    // overlay.classList.add('active');
+    overlay.classList.add('active');
     
-    // overlay.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
   }
 
   const closeModal = e => {
     const app = e.target.closest('.App');
     const modal = app.querySelector('.modal');
-    // const overlay = app.querySelector('#overlay');
+    const overlay = app.querySelector('#overlay');
 
     modal.classList.remove('active');
-    // overlay.classList.remove('active');
+    overlay.classList.remove('active');
+  }
+
+  const changeStep = btn => {
+    let index = 0;
+    const active = document.querySelector(".step.active");
+    index = steps.indexOf(active);
+    steps[index].classList.remove("active");
+    if (btn === "next") {
+      index++;
+    } else if (btn === "prev") {
+      index--;
+    }
+    steps[index].classList.add("active");
   }
 
   return (
     <div>
       <h1>YouStream</h1>
       <div className="App">
-        <button className="Playlist-button" onClick={openModal}>Tutorial</button>
+        <button type="button" className="Playlist-button" data-toggle="modal" data-target="#myModal" id="myBtn" onClick={openModal}>Tutorial</button>
 
-        {/* <div className="alert alert-info">
-          Boostrap Multi-Page Modal - Each 
-          <br/><code>&lt;div className=&quot;modal-split&quot;&gt;&lt;/div&gt;</code> 
-          <br/>Declaration is a page. 
-        </div>
+        <div className="modal fade" id="myModal">
+          <div className="step step-1 active">
+            <div className="step-header">1/4</div>
+            <div className="form-group">
+              <h1>Welcome to YouStream!</h1>
+              <h2>This tutorial will walk you through all of the features of this application.</h2>
+              <h3>If you want to skip the tutorial, feel free to click anywhere outside the tutorial. Else, press "Next"!</h3>
+            </div>
+            <div className="form-group">
+              <label htmlFor="lastName">Last Name</label>
+              <input type="text" id="lastName" name="last-name"/>
+            </div>
+            <div className="form-group">
+              <label htmlFor="nickName">Nick Name</label>
+              <input type="text" id="nickName" name="nick-name"/>
+            </div>
+            <div className="step-footer">
+              <button type="button" className="next-btn">Next</button>
+            </div>
+          </div>
 
-        <div className="button">
-          <button type="button" className="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-          Launch demo modal
-          </button>
-        </div>
+          <div className="step step-2">
+          <div className="step-header">2/4</div>
+            <div className="form-group">
+              <h1>What is YouStream?</h1>
+              <h2>YouStream is an application designed for Spotify users to create their own song playlists and save them to their account.</h2>
+              <h3>This means you need to be a Spotify user to use this application!</h3>
+              <h3>If you have an account, begin by clicking the "Connect to Spotify" button in the top right corner.</h3>
+              <label htmlFor="email">Email</label>
+              <input type="text" id="email" name="email"/>
+            </div>
+            <div className="form-group">
+              <label htmlFor="phone">Phone</label>
+              <input type="number" id="phone" name="phone-number"/>
+            </div>
+            <div className="step-footer">
+              <button type="button" className="previous-btn">Prev</button>
+              <button type="button" className="next-btn">Next</button>
+            </div>
+          </div>
 
-        <div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel">
-          <div className="modal-dialog" role="document">
+          <div className="step step-3">
+          <div className="step-header">3/4</div>
+            <div className="form-group">
+              <h1>Picking the Songs</h1>
+              <h2>Type an song, album, or artist in the search bar.</h2>
+              <h3>Clicking the "Search" button will add the results to the "Results" list.</h3>
+              <h3>Clicking the "I'm Feeling Lucky" button will automatically generate a playlist of seven songs based on the search bar input.</h3>
+              <label htmlFor="email">Email</label>
+              <input type="text" id="email" name="email"/>
+            </div>
+            <div className="form-group">
+              <label htmlFor="phone">Phone</label>
+              <input type="number" id="phone" name="phone-number"/>
+            </div>
+            <div className="step-footer">
+              <button type="button" className="previous-btn">Prev</button>
+              <button type="button" className="next-btn">Next</button>
+            </div>
+          </div>
 
-            <div className="modal-content">
-              <div className="modal-header">
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 className="modal-title" id="myModalLabel">Modal title</h4>
-              </div>
-        
-              <div className="modal-body">
-                <div className="modal-split">
-                  1
-                </div>
-
-                <div className="modal-split">
-                2
-                </div>
-
-                <div className="modal-split">
-                3
-                </div>	
-
-              </div>
-
-              <div className="modal-footer">
-              </div>
+          <div className="step step-4">
+            <div className="step-header">4/4</div>
+            <div className="form-group">
+              <h1>Picking the Songs</h1>
+              <h2>Type an song, album, or artist in the search bar.</h2>
+              <h3>Clicking the "Search" button will </h3>
+              <h3>If you have an account, begin by clicking the "Connect to Spotify" in the top right corner.</h3>
+              <label htmlFor="country">country</label>
+              <input type="text" id="country" name="country"/>
+            </div>
+            <div className="form-group">
+              <label htmlFor="city">City</label>
+              <input type="text" id="city" name="city"/>
+            </div>
+            <div className="form-group">
+              <label htmlFor="postCode">Post Code</label>
+              <input type="text" id="postCode" name="post-code"/>
+            </div>
+            <div className="step-footer">
+              <button type="button" className="previous-btn">Prev</button>
+              <button type="submit" className="submit-btn">Submit</button>
             </div>
           </div>
         </div>
-
-        <div className="alert alert-info">
-          EX: (These divs go in the modal-body) 
-          <br/><code>&lt;div className=&quot;modal-split&quot;&gt; Page 1 content goes here &lt;/div&gt;
-          <br/>&lt;div className=&quot;modal-split&quot;&gt; Page 2 content goes here &lt;/div&gt;
-          <br/>&lt;div className=&quot;modal-split&quot;&gt; and so on  &lt;/div&gt;</code>
-        </div>  */}
-
         
         {logInAction(accessTokenMatch)}
         
@@ -333,6 +328,8 @@ function App() {
           <SearchResults searchResults={searchResults} onAdd={addSong}/>
           <Playlist playlistName={playlistName} playlistSongs={playlistSongs} onRemove={removeSong} onNameChange={updatePlaylistName} onShuffle={shufflePlaylist} onRandomize={randomizePlaylist} onSave={savePlaylist}/>
         </div>
+
+        <div id="overlay"></div>
       </div>
     </div>
   );
