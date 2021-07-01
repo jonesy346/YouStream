@@ -55,6 +55,11 @@ function App() {
   );
 
   let steps;
+  let storageCounter = 0;
+  let counterList = [];
+  let storageList = [];
+  const myStorage = window.sessionStorage;
+  myStorage.setItem('counterList', counterList);
 
   useEffect(() => {
     // Update the document title using the browser API
@@ -83,9 +88,6 @@ function App() {
       });
       modal.reset();
     });
-    
-
-    
   });
 
   const addSong = (song) => {
@@ -93,10 +95,22 @@ function App() {
       return;
     }
     setPlaylistSongs((playlistSongs) => [...playlistSongs, song]);
+    // try to implement session storage with time labels
+    storageList = [...storageList, song];
+    storageCounter += 1;
+    myStorage.setItem(counterList, [...myStorage.getItem(counterList), storageCounter]);
+    myStorage.setItem(storageCounter, storageList);
+    console.log(storageList);
+    
   };
 
   const removeSong = (song) => {
     setPlaylistSongs((playlistSongs) => playlistSongs.filter(savedSong => savedSong.id !== song.id));
+    storageList = storageList.filter(savedSong => savedSong.id !== song.id);
+    storageCounter += 1;
+    myStorage.setItem(counterList, [...myStorage.getItem(counterList), storageCounter]);
+    myStorage.setItem(storageCounter, storageList);
+    console.log(storageList);
   };
 
   const updatePlaylistName = (name) => {
@@ -125,6 +139,11 @@ function App() {
         const songChoiceId = [songChoice.id];
         Spotify.getRecommendedSongs(songChoiceId).then((newSongs) => {
         setPlaylistSongs([songChoice, ...newSongs]);
+        storageList = [songChoice, ...newSongs];
+        storageCounter += 1;
+        myStorage.setItem(counterList, [...myStorage.getItem(counterList), storageCounter]);
+        myStorage.setItem(storageCounter, storageList);
+        console.log(storageList);
         });
       }
     });
@@ -146,6 +165,11 @@ function App() {
   const shufflePlaylist = (songlist) => {
     Promise.all(shuffle(songlist)).then((newSongs) => {
       setPlaylistSongs(newSongs);
+      storageList = newSongs;
+      storageCounter += 1;
+      myStorage.setItem(counterList, [...myStorage.getItem(counterList), storageCounter]);
+      myStorage.setItem(storageCounter, storageList);
+      console.log(storageList);
     });
   }
 
@@ -153,6 +177,11 @@ function App() {
     const songIDList = songlist.map((song) => song.id);
     Spotify.getRecommendedSongs(songIDList).then((newSongs) => {
       setPlaylistSongs(newSongs);
+      storageList = newSongs;
+      storageCounter += 1;
+      myStorage.setItem(counterList, [...myStorage.getItem(counterList), storageCounter]);
+      myStorage.setItem(storageCounter, storageList);
+      console.log(storageList);
     });
   }
 
@@ -189,7 +218,6 @@ function App() {
     return (
         <button className="Playlist-button" disabled>Logged in</button>
     );
-
   };
 
   const openModal = e => {

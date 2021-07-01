@@ -19,6 +19,8 @@ export default function Playlist(props) {
         <div className="Playlist">
             <h3>Playlist Name:</h3>
             <input defaultValue={"New Playlist"} onChange={handleNameChange}/>
+            <i class="far fa-arrow-alt-circle-left"></i>
+            <i class="far fa-arrow-alt-circle-right"></i>
             <SongList 
                 songs={props.playlistSongs}
                 onRemove={props.onRemove} 
