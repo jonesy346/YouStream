@@ -98,8 +98,8 @@ function App() {
     // try to implement session storage with time labels
     storageList = [...storageList, song];
     storageCounter += 1;
-    myStorage.setItem(counterList, [...myStorage.getItem(counterList), storageCounter]);
-    myStorage.setItem(storageCounter, storageList);
+    myStorage.setObj(counterList, [...myStorage.getObj(counterList), storageCounter]);
+    myStorage.setObj(storageCounter, storageList);
     console.log(storageList);
     
   };
@@ -108,8 +108,8 @@ function App() {
     setPlaylistSongs((playlistSongs) => playlistSongs.filter(savedSong => savedSong.id !== song.id));
     storageList = storageList.filter(savedSong => savedSong.id !== song.id);
     storageCounter += 1;
-    myStorage.setItem(counterList, [...myStorage.getItem(counterList), storageCounter]);
-    myStorage.setItem(storageCounter, storageList);
+    myStorage.setObj(counterList, [...myStorage.getObj(counterList), storageCounter]);
+    myStorage.setObj(storageCounter, storageList);
     console.log(storageList);
   };
 
@@ -141,8 +141,8 @@ function App() {
         setPlaylistSongs([songChoice, ...newSongs]);
         storageList = [songChoice, ...newSongs];
         storageCounter += 1;
-        myStorage.setItem(counterList, [...myStorage.getItem(counterList), storageCounter]);
-        myStorage.setItem(storageCounter, storageList);
+        myStorage.setObj(counterList, [...myStorage.getObj(counterList), storageCounter]);
+        myStorage.setObj(storageCounter, storageList);
         console.log(storageList);
         });
       }
@@ -167,8 +167,8 @@ function App() {
       setPlaylistSongs(newSongs);
       storageList = newSongs;
       storageCounter += 1;
-      myStorage.setItem(counterList, [...myStorage.getItem(counterList), storageCounter]);
-      myStorage.setItem(storageCounter, storageList);
+      myStorage.setObj(counterList, [...myStorage.getObj(counterList), storageCounter]);
+      myStorage.setObj(storageCounter, storageList);
       console.log(storageList);
     });
   }
@@ -179,8 +179,8 @@ function App() {
       setPlaylistSongs(newSongs);
       storageList = newSongs;
       storageCounter += 1;
-      myStorage.setItem(counterList, [...myStorage.getItem(counterList), storageCounter]);
-      myStorage.setItem(storageCounter, storageList);
+      myStorage.setObj(counterList, [...myStorage.getObj(counterList), storageCounter]);
+      myStorage.setObj(storageCounter, storageList);
       console.log(storageList);
     });
   }
