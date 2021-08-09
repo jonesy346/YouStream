@@ -13,8 +13,6 @@ This project is a simple API web application store application that allows users
 
 *Requires having a Spotify account for playlists to be saved.*
 
-A [Codecademy Pro Intensive](https://pro.codecademy.com/) project.
-
 ## Technologies
 This project is created with:
 * Stripe version: 8.137.0
