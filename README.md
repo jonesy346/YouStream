@@ -31,14 +31,14 @@ This runs the app in development mode.
 Open http://localhost:3000 to view it in the browser.
 
 ## Features
-* Intensive 
-*
-*
-*
+* Users can query the Spotify API by typing an input in the search bar.
+* Search results are then displayed and users can add individual tracks to a tracklist.
+* The tracklist can be shuffled (each song in the list will be replaced with another song by the artist).
+* Users can navigate to previously made tracklists.
+* Tracklists can be given a name and downloaded to the user's Spotify account.
 
 ## Status
 Finished.
 
 ## Inspiration
-* Inspiration for store theme comes from *Cornell Surgical Society* at Cornell University, a premed organization I was an active member of. 
 * Direct inspiration for project comes from the [Codecademy Pro](https://pro.codecademy.com/) intensive project *Jammming*. 
