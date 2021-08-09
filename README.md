@@ -9,9 +9,9 @@
 * [Inspiration](#inspiration)
 
 ## General info
-This project is a simple API web application store application that allows users to search the Spotify library, create a custom playlist, and then save the playlist to their Spotify accounts.
+This project is a simple API web application store application that allows users to search the Spotify library, create a custom playlist, and then save the playlist to their Spotify accounts. Tracklists that are made by the user are stored in sessionstorage so that they can be accessed later if desired.
 
-*Requires having a Spotify account for playlists to be saved.*
+*Requires having a Spotify account for searching the Spotify library and saving playlists.*
 
 ## Technologies
 This project is created with:
