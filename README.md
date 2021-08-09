@@ -31,7 +31,7 @@ This runs the app in development mode.
 Open http://localhost:3000 to view it in the browser.
 
 ## Features
-*
+* Intensive 
 *
 *
 *
@@ -41,4 +41,4 @@ Finished.
 
 ## Inspiration
 * Inspiration for store theme comes from *Cornell Surgical Society* at Cornell University, a premed organization I was an active member of. 
-* Direct inspiration for project comes from the [Codecademy Pro Intensive](https://pro.codecademy.com/) project *Jammming*. 
+* Direct inspiration for project comes from the [Codecademy Pro](https://pro.codecademy.com/) intensive project *Jammming*. 
