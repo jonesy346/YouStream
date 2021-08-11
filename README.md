@@ -6,7 +6,7 @@
 * [Setup](#setup)
 * [Features](#features)
 * [Status](#status)
-* [Inspiration](#inspiration)
+* [Acknowledgments](#acknowledgments)
 
 ## General info
 This project is a simple API web application that allows users to search the Spotify library, create a custom playlist, and then save the playlist to their Spotify accounts. Tracklists that are made by the user are stored in sessionstorage so that they can be accessed later if desired.
@@ -40,5 +40,5 @@ Open http://localhost:3000 to view it in the browser.
 ## Status
 Finished.
 
-## Inspiration
+## Acknowledgments
 * Direct inspiration for project comes from the [Codecademy Pro](https://pro.codecademy.com/) intensive project *Jammming*. 
