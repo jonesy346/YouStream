@@ -54,6 +54,30 @@ h2 {
 }
 
 /* Nav Buttons */
+
+.navBtnsContainer {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	padding-top: 1.27rem;
+	justify-content: space-between;
+}
+
+.tutorial-button {
+    cursor: pointer;
+    width: 8.3rem;
+    padding: .77rem 0;
+    border-radius: 54px;
+    border-width: 0px;
+    /* background-color: #6c41ec; */
+    background-color: hsla(60, 50%, 50%, 1);
+    text-align: center;
+    font-size: .83rem;
+    transition: background-color .25s;
+    color: #fff;
+    font-weight: 500;
+}
+
 .navBtnContainer, .navBtnTxt {
     display: -ms-flexbox;
     display: flex;
@@ -65,8 +89,7 @@ h2 {
 	font-family: Helvetica Neue,Helvetica,sans-serif;
 	font-weight: 800;
 	height: 40px;
-	width: 10rem;
-	/* background-color: #fff; */
+
 	padding: 10px 15px 10px 10px;
 	border-radius: 54px;
 	color: white;
@@ -95,7 +118,7 @@ h2 {
 
 .navBtnContainer::before {
 	content: '';
-	position: absolute;
+	/* position: absolute; */
 	top: -5px;
 	left: -5px;
 	right: -5px;
@@ -217,10 +240,18 @@ h2 {
 	text-align: center;
 }
 
+.swal-title {
+	font-family: "Work Sans", sans-serif;
+}
+
+.swal-text {
+	font-family: "Work Sans", sans-serif;
+}
+
 /* New Modal */
 
 body {
-	/* font-family: "Montserrat"; */
+	font-family: "Montserrat";
 }
 
 section {
@@ -241,6 +272,31 @@ section {
 	background-color: white;
 }
 
+#myModal {
+	position: fixed;
+    z-index: 3;
+    background-color: rgba(255, 255, 255, 1);
+    width: 50%;
+    height: 50%;
+    border: 2px solid #34495e;
+    border-radius: 4px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#myModal h1 {
+	padding-top: 0;
+	background-color: white;
+	color: black;
+	font-weight: bold;
+    text-align: center;
+	font-family: 'Poppins', sans-serif;    
+	font-size: 1.88rem;
+}
+
 .step {
 	display: none;
 }
@@ -249,9 +305,39 @@ section {
 	display: block;
 }
 
-.form-group {
+.step-header {
+	padding-top: .77rem;
+	text-align: right;
+}
+
+.step-footer {
 	width: 100%;
-	margin-top: 20px;
+	position: absolute;
+	bottom: 0;
+	padding-bottom: 2rem;
+}
+
+.step-footer button {
+	color: #ffffff;
+    background-color: #1abc9c;
+	/* font-size: 15px;
+    font-weight: normal; */
+    line-height: 1.4;
+    border-radius: 4px;
+}
+
+.footer-btn {
+	padding: 2rem;
+}
+
+.form-group {
+	padding-left: 10px;
+	padding-right: 10px;
+
+}
+
+.form-group :is(h2, h3) {
+	padding-bottom: 15px;
 }
 
 .form-group input {

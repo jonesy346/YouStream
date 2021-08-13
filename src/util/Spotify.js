@@ -5,15 +5,8 @@ const redirectURI = process.env.REACT_APP_REDIRECT_URI;
 let accessToken;
 let expiresIn;
 
-// log in button
-// debug clicking randomizer button
-// instruction manual
-// adding a song removes it from the lefthand side list
-
 const Spotify = {
     getAccessToken() {
-        console.log(clientID);
-
         const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
         const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
 
@@ -31,28 +24,25 @@ const Spotify = {
         }
 
         if (accessToken && (Date.now() < expiresAt)) {
-        return accessToken;
+            return accessToken;
         }
 
-        accessToken = accessTokenMatch ? accessTokenMatch[1] : null;
-
-        if (accessToken) {
-        window.history.pushState('Access Token', null, '/');
-        return accessToken;
+        if (accessTokenMatch) {
+            window.history.pushState('Access Token', null, '/');
+            return accessTokenMatch[1];
         }
 
         const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&redirect_uri=${redirectURI}&scope=playlist-modify-public`;
-        console.log(accessUrl);
         window.location = accessUrl;
+        
     },
 
-    search(TERM) {
-        accessToken = Spotify.getAccessToken();
+    search(TERM, token) {
         TERM = TERM.replace(' ', '%20');
 
         return fetch(`https://api.spotify.com/v1/search?type=track&q=${TERM}`, 
             {
-                headers: {Authorization: `Bearer ${accessToken}`}
+                headers: {Authorization: `Bearer ${token}`}
             }
         ).then(response => response.json()).then(jsonResponse => {
             if (!jsonResponse.tracks) {
@@ -70,12 +60,10 @@ const Spotify = {
         });
     },
 
-    getArtistSongs(id) {
-        accessToken = Spotify.getAccessToken();
-        console.log(accessToken);
+    getArtistSongs(id, token) {
         return fetch(`https://api.spotify.com/v1/artists/${id}/top-tracks?country=US`, 
             {
-                headers: {Authorization: `Bearer ${accessToken}`}
+                headers: {Authorization: `Bearer ${token}`}
             }
         ).then(response => response.json()).then(jsonResponse => {
             if (!jsonResponse.tracks) {
@@ -94,21 +82,14 @@ const Spotify = {
 
     },
 
-    getRecommendedSongs(songIDList) {
-        accessToken = Spotify.getAccessToken();
+    getRecommendedSongs(songIDList, token) {
         let queryStringParams = '?seed_tracks=';
         queryStringParams += songIDList.join(',');
         queryStringParams += '&limit=7';
 
-        // update the access token logic to expire at exactly the right time, instead of setting expiration from when the user initiates their next search
-        // after user redirect on login, restoring the search term from before the redirect
-        // ensure playlist information doesn't get cleared if a user has to refresh their access token
-
-        console.log(accessToken);
-        console.log(queryStringParams);
         return fetch(`https://api.spotify.com/v1/recommendations${queryStringParams}`, 
             {
-                headers: {Authorization: `Bearer ${accessToken}`}
+                headers: {Authorization: `Bearer ${token}`}
             }
         ).then(response => response.json()).then(jsonResponse => {
             if (!jsonResponse.tracks) {
@@ -126,13 +107,14 @@ const Spotify = {
         });
     },
 
-    savePlaylist(playlistName, trackURIs) {
+    savePlaylist(playlistName, trackURIs, token) {
+
         if (!(playlistName && trackURIs)) {
             return;
         } 
-        accessToken = Spotify.getAccessToken();
+
         const headers = {
-            Authorization: `Bearer ${accessToken}`
+            Authorization: `Bearer ${token}`
         };
         let userID;
 

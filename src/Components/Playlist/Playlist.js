@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Playlist.css';
 import SongList from '../SongList/SongList.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowAltCircleLeft, faArrowAltCircleRight } from '@fortawesome/free-solid-svg-icons'
 
 export default function Playlist(props) {
+    useEffect(() => {  
+    });
+
     const handleNameChange = (event) => {
         props.onNameChange(event.target.value);
     };
@@ -17,18 +22,21 @@ export default function Playlist(props) {
 
     return (
         <div className="Playlist">
-            <h3>Playlist Name:</h3>
-            <input defaultValue={"New Playlist"} onChange={handleNameChange}/>
-            <i class="far fa-arrow-alt-circle-left"></i>
-            <i class="far fa-arrow-alt-circle-right"></i>
+            <input placeholder={"Enter new playlist name"} onChange={handleNameChange}/>
+
+            <div className="Playlist-nav">
+                <FontAwesomeIcon icon={faArrowAltCircleLeft} className="fa-icons" onClick={props.onNavLeft}/>
+                <h3>Change Playlist</h3>
+                <FontAwesomeIcon icon={faArrowAltCircleRight} className="fa-icons" onClick={props.onNavRight}/>
+            </div>
             <SongList 
                 songs={props.playlistSongs}
                 onRemove={props.onRemove} 
                 isRemoval={true}
             /> 
             <button className="Playlist-button" onClick={shuffle}>Playlist Shuffler</button>
-            <button className="Playlist-button" onClick={randomize}>Randomizer</button>
-            <button className="Playlist-button" onClick={props.onSave}>Download to Spotify</button>
+            {/* <button className="Playlist-button" onClick={randomize}>Randomizer</button> */}
+            <button className="Playlist-button" onClick={props.onSave}>Save to Spotify</button>
         </div>
     );
 };
