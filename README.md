@@ -17,6 +17,7 @@ This project is a simple API web application that allows users to search the Spo
 This project is created with:
 * React version: 17.0.2
 * Express version: 4.17.1
+* SweetAlert version: 2.1.2
 	
 ## Setup
 To run this project, install it locally using npm:
