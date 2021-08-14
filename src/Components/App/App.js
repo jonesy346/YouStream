@@ -109,6 +109,12 @@ function App() {
       myStorage.setObj('counterList', counterList);
       myStorage.setObj(storageCounter, playlistSongs);
     } 
+
+    if (window.location.href.match(/access_token=([^&]*)/) || window.location.href.match(/expires_in=([^&]*)/)) {
+      setAccessToken(window.location.href.match(/access_token=([^&]*)/)[1]);
+      window.history.pushState('Access Token', null, '/');
+    }
+
   });
 
   const objectsEqual = (o1, o2) => {

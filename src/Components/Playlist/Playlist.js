@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './Playlist.css';
 import SongList from '../SongList/SongList.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowAltCircleLeft, faArrowAltCircleRight } from '@fortawesome/free-solid-svg-icons'
 
 export default function Playlist(props) {
-    useEffect(() => {  
-    });
-
     const handleNameChange = (event) => {
         props.onNameChange(event.target.value);
     };
