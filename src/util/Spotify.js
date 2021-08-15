@@ -7,20 +7,36 @@ let expiresIn;
 
 const Spotify = {
     getAccessToken() {
+        const origHeader = btoa(`${clientID}:${clientSecret}`);
+
+        return fetch(`https://accounts.spotify.com/api/token?grant_type=client_credentials`,
+            {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': `Basic ${origHeader}`
+                },
+            } 
+        ).then(response => response.json()).then(jsonResponse => {
+            return [jsonResponse.access_token, jsonResponse.expires_in];
+        })
+    },
+
+    getUserAccessToken() {
         const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
         const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
 
         expiresIn = expiresInMatch ? expiresInMatch[1] : null;
         expiresIn = expiresIn || 3600;
 
-        let expiresAt = sessionStorage.getItem('expires_at');
+        let expiresAt = sessionStorage.getItem('user_expires_at');
         if (!expiresAt) {
         expiresAt = Date.now() + Number(expiresIn) * 1000;
-        sessionStorage.setItem('expires_at', expiresAt);
+        sessionStorage.setItem('user_expires_at', expiresAt);
         }
 
         if (Date.now() > expiresAt) {
-        sessionStorage.removeItem('expires_at');
+        sessionStorage.removeItem('user_expires_at');
         }
 
         if (accessToken && (Date.now() < expiresAt)) {

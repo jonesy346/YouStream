@@ -57,6 +57,7 @@ function App() {
   const [counterList, setCounterList] = useState([]);
   const [storageCounter, setStorageCounter] = useState(0);
   const [accessToken, setAccessToken] = useState(''); 
+  const [userAccessToken, setUserAccessToken] = useState('');
 
   let steps;
   
@@ -82,6 +83,13 @@ function App() {
     });
 
     closeBtn.addEventListener("click", closeModal);
+
+    // get accessToken on my server
+    Spotify.getAccessToken().then(res => {
+      setAccessToken(res[0]);
+      const expiresAt = Date.now() + Number(res[1]) * 1000;
+      sessionStorage.setItem('expires_at', expiresAt);
+    });
 
   }, []);
 
@@ -111,7 +119,7 @@ function App() {
     } 
 
     if (window.location.href.match(/access_token=([^&]*)/) || window.location.href.match(/expires_in=([^&]*)/)) {
-      setAccessToken(window.location.href.match(/access_token=([^&]*)/)[1]);
+      setUserAccessToken(window.location.href.match(/access_token=([^&]*)/)[1]);
       window.history.pushState('Access Token', null, '/');
     }
 
@@ -151,8 +159,8 @@ function App() {
     } else if (!playlistName) {
       swal('Oops!', 'Please type a playlist name', "error");
       return;
-    } else if (!accessToken || Date.now() >= sessionStorage.getItem('expires_at')) {
-      setAccessToken(Spotify.getAccessToken());
+    } else if (!userAccessToken || Date.now() >= sessionStorage.getItem('user_expires_at')) {
+      setUserAccessToken(Spotify.getUserAccessToken());
       return;
     }
 
@@ -172,8 +180,11 @@ function App() {
 
   const search = (term) => {
     if (!accessToken || Date.now() >= sessionStorage.getItem('expires_at')) {
-      setAccessToken(Spotify.getAccessToken());
-      return;
+      Spotify.getAccessToken().then(res => {
+        setAccessToken(res[0]);
+        const expiresAt = Date.now() + Number(res[1]) * 1000;
+        sessionStorage.setItem('expires_at', expiresAt);
+      });
     }
 
     Spotify.search(term, accessToken).then(songs => setSearchResults(songs));
@@ -181,8 +192,11 @@ function App() {
 
   const luckySearch = (term) => {
     if (!accessToken || Date.now() >= sessionStorage.getItem('expires_at')) {
-      setAccessToken(Spotify.getAccessToken());
-      return;
+      Spotify.getAccessToken().then(res => {
+        setAccessToken(res[0]);
+        const expiresAt = Date.now() + Number(res[1]) * 1000;
+        sessionStorage.setItem('expires_at', expiresAt);
+      });
     }
 
     Spotify.search(term, accessToken).then(songs => {
@@ -200,10 +214,13 @@ function App() {
 
   const shuffle = (songlist) => {
     if (!accessToken || Date.now() >= sessionStorage.getItem('expires_at')) {
-      setAccessToken(Spotify.getAccessToken());
-      return;
+      Spotify.getAccessToken().then(res => {
+        setAccessToken(res[0]);
+        const expiresAt = Date.now() + Number(res[1]) * 1000;
+        sessionStorage.setItem('expires_at', expiresAt);
+      });
     }
-
+    
     return songlist.map(song => {
         return Spotify.getArtistSongs(song.artistID, accessToken).then(songs => {
           let choice;
@@ -214,6 +231,30 @@ function App() {
           return choice;
         });
     });
+
+    // possible alternate solution
+
+    // let newList = [];
+    // console.log(songlist);
+    // songlist.forEach(song => {
+    //   Spotify.getArtistSongs(song.artistID, accessToken).then(songs => {
+    //     let choice;
+    //     do {
+    //       choice = songs[Math.floor(Math.random()*songs.length)];
+    //     } 
+    //     while (choice.id === song.id || newList.find(element => element.id === choice.id));
+    //     console.log(choice);
+    //     newList.push(choice);
+    //     console.log(newList);
+    //   });
+    //   console.log(newList);
+    // });
+
+    // Promise.all(newList).then((newList) => {
+    //   console.log(newList);
+    //   return newList;
+    // });
+
   };
 
   const shufflePlaylist = (songlist) => {
@@ -226,8 +267,11 @@ function App() {
 
   const randomizePlaylist = (songlist) => {
     if (!accessToken || Date.now() >= sessionStorage.getItem('expires_at')) {
-      setAccessToken(Spotify.getAccessToken());
-      return;
+      Spotify.getAccessToken().then(res => {
+        setAccessToken(res[0]);
+        const expiresAt = Date.now() + Number(res[1]) * 1000;
+        sessionStorage.setItem('expires_at', expiresAt);
+      });
     }
 
     const songIDList = songlist.map((song) => song.id);
@@ -239,11 +283,11 @@ function App() {
   }
 
   const logIn = () => {
-    setAccessToken(Spotify.getAccessToken());
+    setUserAccessToken(Spotify.getUserAccessToken());
   };
 
   const logOut = () => {
-    setAccessToken('');
+    setUserAccessToken('');
   }
     
   const logInAction = boolean => {
@@ -315,7 +359,7 @@ function App() {
       <div className="App">
         <div className="navBtnsContainer">
           <button type="button" className="tutorial-button" data-toggle="modal" data-target="#myModal" id="myBtn" onClick={openModal}>Tutorial</button>
-          {logInAction(accessToken)}
+          {logInAction(userAccessToken)}
         </div>
 
         <div className="modal fade" id="myModal">
@@ -338,8 +382,8 @@ function App() {
           <div className="step-header">2/6</div>
             <div className="form-group">
               <h1>What is YouStream?</h1>
-              <h2>YouStream is an application designed for Spotify users to create their own song playlists and save them to their account.</h2>
-              <h3>This means you need to be a Spotify user to use this application!</h3>
+              <h2>YouStream is an application designed for users to create song playlists and save them to their Spotify accounts.</h2>
+              <h3>If you don't have an account, you can still search for songs and create your own playlists but can't save them.</h3> 
               <h3>If you have an account, begin by clicking the "Connect to Spotify" button in the top right corner.</h3>  
             </div>
             
