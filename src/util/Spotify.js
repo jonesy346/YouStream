@@ -9,13 +9,14 @@ const Spotify = {
     getAccessToken() {
         const origHeader = btoa(`${clientID}:${clientSecret}`);
 
-        return fetch(`https://accounts.spotify.com/api/token?grant_type=client_credentials`,
+        return fetch(`https://accounts.spotify.com/api/token`,
             {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Authorization': `Basic ${origHeader}`
                 },
+                body: "grant_type=client_credentials"
             } 
         ).then(response => response.json()).then(jsonResponse => {
             return [jsonResponse.access_token, jsonResponse.expires_in];

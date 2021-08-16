@@ -220,41 +220,26 @@ function App() {
         sessionStorage.setItem('expires_at', expiresAt);
       });
     }
-    
+
+    // could add something to check for artist lists having only one song
+
+    let newList = [];
     return songlist.map(song => {
-        return Spotify.getArtistSongs(song.artistID, accessToken).then(songs => {
-          let choice;
-          do {
-            choice = songs[Math.floor(Math.random()*songs.length)];
-          } 
-          while (choice.id === song.id);
-          return choice;
-        });
+      return Spotify.getArtistSongs(song.artistID, accessToken).then(songs => {
+        if (songs.length === 1) {
+          newList.push(songs[0]);
+          return songs[0];
+        }
+
+        let choice;
+        do {
+          choice = songs[Math.floor(Math.random()*songs.length)];
+        } 
+        while (choice.id === song.id || newList.find(element => element.id === choice.id));
+        newList.push(choice);
+        return choice;
+      });
     });
-
-    // possible alternate solution
-
-    // let newList = [];
-    // console.log(songlist);
-    // songlist.forEach(song => {
-    //   Spotify.getArtistSongs(song.artistID, accessToken).then(songs => {
-    //     let choice;
-    //     do {
-    //       choice = songs[Math.floor(Math.random()*songs.length)];
-    //     } 
-    //     while (choice.id === song.id || newList.find(element => element.id === choice.id));
-    //     console.log(choice);
-    //     newList.push(choice);
-    //     console.log(newList);
-    //   });
-    //   console.log(newList);
-    // });
-
-    // Promise.all(newList).then((newList) => {
-    //   console.log(newList);
-    //   return newList;
-    // });
-
   };
 
   const shufflePlaylist = (songlist) => {
